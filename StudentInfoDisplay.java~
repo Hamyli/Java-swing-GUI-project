@@ -1,0 +1,127 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.util.*;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+class StudentInfoDisplay extends JPanel implements ActionListener
+{
+  private JPanel mainDisplay;
+  private JLabel nameInput;
+  private JLabel numberInput;
+  private JLabel contestInput;
+  private JLabel gradeInput;
+  private JLabel costInput;
+  
+  
+  public void actionPerformed(ActionEvent e)
+  {
+    JComboBox selected = (JComboBox)e.getSource();
+    String info = (String)selected.getSelectedItem();
+    updateLabel(info);
+  }
+  
+  
+  protected void updateLabel(String name)//the student name will determine the information
+  {
+    nameInput.setText("you are special"); // Code this according to how the arrary is arranged 
+    numberInput.setText("you are special");
+    contestInput.setText("you are special");
+    gradeInput.setText("you are special");
+    costInput.setText("you are special");
+  }
+  public StudentInfoDisplay()
+  {
+    mainDisplay=new JPanel(new GridLayout(7,2,2,5));
+    mainDisplay.setBorder(BorderFactory.createLineBorder(Color.black));
+
+    
+    
+    //Dimension minimumSize=new Dimension(600,400);
+    //mainDisplay.setMinimumSize(minimumSize);
+    //mainDisplay.setPreferredSize(new Dimension(400, 200));
+    
+    
+    JLabel general =new JLabel("Student Information Outline");
+    JLabel studentName=new JLabel("Student Name:");
+    JLabel studentNumber=new JLabel("Student Number:");
+    JLabel numberOfContest=new JLabel("Contest Enrolled in:");
+    JLabel grade=new JLabel("Grade:");
+    JLabel layoutPurpose=new JLabel("");
+    JLabel cost=new JLabel("Debit/Credit");
+    JLabel costInput=new JLabel("");
+    
+    JLabel nameInput=new JLabel();
+    JLabel numberInput=new JLabel();
+    JLabel contestInput=new JLabel();
+    JLabel gradeInput=new JLabel();
+    
+    JButton add=new JButton("Add");
+    JTextField userInput=new JTextField();
+    
+    general.setFont(new Font("arial",Font.BOLD,20));
+    studentName.setFont(new Font("arial",Font.PLAIN,14));
+    studentNumber.setFont(new Font("arial",Font.PLAIN,14));
+    numberOfContest.setFont(new Font("arial",Font.PLAIN,14));
+    grade.setFont(new Font("arial",Font.PLAIN,14));
+    cost.setFont(new Font("arial",Font.PLAIN,14));
+    
+    studentName.setForeground(Color.DARK_GRAY);
+    studentNumber.setForeground(Color.DARK_GRAY);
+    numberOfContest.setForeground(Color.DARK_GRAY);
+    grade.setForeground(Color.DARK_GRAY);
+    cost.setForeground(Color.DARK_GRAY);
+    
+    mainDisplay.add("North",general);
+    mainDisplay.add("North",layoutPurpose);
+    mainDisplay.add("North", studentName);
+    mainDisplay.add("North", nameInput);
+    mainDisplay.add("NORTH", studentNumber);
+    mainDisplay.add("NORTH", numberInput);
+    mainDisplay.add("NORTH", numberOfContest);
+    mainDisplay.add("NORTH", contestInput);
+    mainDisplay.add("NORTH", grade);
+    mainDisplay.add("NORTH", gradeInput);
+    mainDisplay.add("NORTH",cost);
+    mainDisplay.add("NORTH",costInput);
+    mainDisplay.add("NORTH",add);
+    mainDisplay.add("NORTH",userInput);
+    mainDisplay.setOpaque(true);
+    
+  }
+  public JPanel getMainDisplay()
+  {
+    return mainDisplay;
+  }
+  public static void DisplayGUI()
+  {
+    JFrame frame=new JFrame("Student Information");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+    StudentInfoDisplay studentInfoDisplay=new StudentInfoDisplay();
+    frame.getContentPane().add(studentInfoDisplay.getMainDisplay());
+    frame.pack();
+    frame.setVisible(true);
+    
+  }
+  public static void main (String args[])
+  {
+    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        DisplayGUI();
+      }
+    });
+  }
+  
+  public void change(ListSelectionEvent e)
+  {
+  }
+  
+  
+}

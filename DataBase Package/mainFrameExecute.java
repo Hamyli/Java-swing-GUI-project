@@ -1,0 +1,345 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+
+/**Name: mainFrameExecute class
+  *Description: This class is the main executing class for the entire software.
+                This class creates the main Menu interface along with saving and retrieving data
+                from text files.
+   Programmer: LineKix program development team
+   Date Modified: January 22, 2011**/
+
+public class mainFrameExecute
+{
+  //two essential arraylist to store all students and all contests
+  public static ArrayList<Student> studentList = new ArrayList<Student>();
+  public static ArrayList<Contest> contestList = new ArrayList<Contest>();
+  
+  /**Method used to retrieve all student related data from a text files from the directory of the software
+    *Data re-enters the program as their assigned object and variable**/
+  public static void getData() throws IOException
+  {
+    File studentFile = new File("studentData.txt");
+    if(!studentFile.exists())
+    {
+      studentFile.createNewFile();
+    }
+    Scanner in = new Scanner(studentFile);
+    int maxIndex = -1;
+    String text[] = new String[1000];
+    while(in.hasNext())
+    {
+      maxIndex++;
+      text[maxIndex] = in.nextLine();
+    }
+    in.close();
+    
+    for(int j = 0; j<= maxIndex; j++)
+    {
+      Scanner sc = new Scanner(text[j]);
+      String firstName = sc.next();
+      System.out.println(firstName);
+      String lastName = sc.next();
+      String studentNumber = sc.next();
+      String grade = sc.next();
+      int cost = Integer.parseInt(sc.next());
+      Student newStudent = new Student(firstName, lastName, studentNumber, grade, cost);
+
+      if(sc.hasNext())
+      {
+        while(sc.hasNext())
+        {
+          newStudent.signUpContest(sc.next());
+        }
+      }
+      mainFrameExecute.studentList.add(newStudent);
+    }
+  }
+  
+  /**method retrieves all contest related data from a specific text file.
+    *Data is re-entered into the program as their assigned object and variable**/
+  public static void getContestData() throws IOException
+  {
+    File contestFile = new File("ContestData.txt");
+    if(!contestFile.exists())
+    {
+      contestFile.createNewFile();
+    }
+    Scanner in = new Scanner(contestFile);
+    int maxIndex = -1;
+    String text[] = new String[1000];
+    while(in.hasNext())
+    {
+      maxIndex++;
+      text[maxIndex] = in.nextLine();
+    }
+    in.close();
+    
+    for(int j = 0; j<= maxIndex; j++)
+    {
+      Scanner sc = new Scanner(text[j]);
+      String contestName = sc.next();
+      String price = sc.next();
+      String grade = sc.next();
+      Contest newContest = new Contest(contestName, price, grade);
+      mainFrameExecute.contestList.add(newContest);
+    }
+  }
+  
+  /**method saves Data into a specific text file so the data can be retrieved later**/
+  public static void saveData() throws IOException
+  {
+    File oldFile = new File("studentData.txt");
+    File upDateFile = new File("temp.txt");
+    PrintWriter output = new PrintWriter(upDateFile);
+    if(mainFrameExecute.studentList.size()!= 0)
+    {
+    for(int j = 0; j<mainFrameExecute.studentList.size(); j++)
+    {
+      Student tempObject = studentList.get(j);
+      output.print(tempObject.getfirstName() + " ");
+      output.print(tempObject.getlastName() + " ");
+      output.print(tempObject.getStudentNumber() + " ");
+      output.print(tempObject.getGrade() + " ");
+      output.print(tempObject.getTotalCost() + " ");
+      for(int x = 0; x<tempObject.contests.size(); x++)
+      {
+        output.print(tempObject.contests.get(x) + " ");
+      }
+      output.println("");
+    }
+    }
+    output.close();
+    oldFile.delete();
+    upDateFile.renameTo(new File("studentData.txt"));
+  }
+  
+  /****/
+  public static void saveContestData() throws IOException
+  {
+    File oldFile = new File("ContestData.txt");
+    File upDateFile = new File("temp2.txt");
+    PrintWriter output = new PrintWriter(upDateFile);
+    if(mainFrameExecute.contestList.size()!= 0)
+    {
+    for(int j = 0; j<mainFrameExecute.contestList.size(); j++)
+    {
+      Contest tempObject = contestList.get(j);
+      output.print(tempObject.getContestName() + " ");
+      output.print(tempObject.getContestCost() + " ");
+      output.print(tempObject.getContestGrade() + " ");
+      output.println("");
+    }
+    }
+    output.close();
+    oldFile.delete();
+    upDateFile.renameTo(new File("ContestData.txt"));
+  }
+  
+  public static void main(String[]args) throws IOException
+  {
+    getData();
+    getContestData();
+    mainFrame frame = new mainFrame();
+    frame.addWindowListener
+      (new WindowAdapter()
+       {
+         public void windowCLosing(WindowEvent e)
+         {
+             System.exit(0);
+         }
+       }
+      );
+  }
+}
+
+class mainFrame extends JFrame implements ActionListener
+{
+  public mainFrame()
+  {
+    super("Main Menu");
+    this.setLayout(new BorderLayout());
+    JPanel headerPane = new JPanel();
+    JLabel label = new JLabel("Main Menu Interface");
+    label.setFont(new Font("Times new Roman", Font.PLAIN, 18));
+    headerPane.add(label);
+    this.add(headerPane, BorderLayout.NORTH);
+    
+    JPanel bodyPane = new JPanel();
+    bodyPane.setLayout(new GridLayout(3, 3));
+    JButton button1 = new JButton("Add Student");
+    button1.addActionListener(this);
+    bodyPane.add(button1);
+    JButton button3 = new JButton("Delete Student");
+    button3.addActionListener(this);
+    bodyPane.add(button3);
+    JButton button4 = new JButton("Add Contest");
+    button4.addActionListener(this);
+    bodyPane.add(button4);
+    JButton button5 = new JButton("Delete Contest");
+    button5.addActionListener(this);
+    bodyPane.add(button5);
+    JButton button6 = new JButton("Change Student Info");
+    button6.addActionListener(this);
+    //bodyPane.add(button6);
+    JButton button7 = new JButton("change Contest Info");
+    button7.addActionListener(this);
+    //bodyPane.add(button7);
+    JButton button8 = new JButton("Display All Students");
+    button8.addActionListener(this);
+    bodyPane.add(button8);
+    JButton button10 = new JButton("Display Registered Contest");
+    button10.addActionListener(this);
+    bodyPane.add(button10);
+    this.add(bodyPane, BorderLayout.CENTER);
+    
+    JPanel endPane = new JPanel();
+    endPane.setLayout(new FlowLayout());
+    JButton button11 = new JButton("Reset All Data");
+    button11.addActionListener(this);
+    endPane.add(button11);
+    JButton button12 = new JButton("Save All Data");
+    button12.addActionListener(this);
+    endPane.add(button12);
+    this.add(endPane, BorderLayout.SOUTH);
+    
+    this.pack();
+    this.setSize(600, 200);
+    this.setVisible(true);
+    
+    // Get the size of the screen
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    
+    // Determine the new location of the window
+    int w = this.getSize().width;
+    int h = this.getSize().height;
+    int x = (dim.width-w)/2;
+    int y = (dim.height-h)/2;
+    
+    // Move the window
+    this.setLocation(x, y);
+  }
+  
+  public void actionPerformed(ActionEvent e)
+  {
+    if(e.getActionCommand().equals("Add Student"))
+    {
+      AddStudentFrame frameAS = new AddStudentFrame();
+      frameAS.addWindowListener
+      (new WindowAdapter()
+       {
+         public void windowCLosing(WindowEvent e)
+         {
+           System.exit(0);
+         }
+       }
+      );
+    }
+    else if(e.getActionCommand().equals("Delete Student"))
+    {
+      DeleteStudentFrame frameDS = new DeleteStudentFrame();
+      frameDS.addWindowListener
+      (new WindowAdapter()
+       {
+         public void windowCLosing(WindowEvent e)
+         {
+           System.exit(0);
+         }
+       }
+      );
+    }
+    else if(e.getActionCommand().equals("Display All Students"))
+    {
+      JFrame frame = new JFrame("Frame");
+      if(mainFrameExecute.studentList.size() != 0)
+      {
+        frame.setLayout(new GridLayout(1,1));
+        StudentInformation pane2 = new StudentInformation();
+        frame.add(pane2);
+        StudentInfoDisplay studentInfoDisplay = new StudentInfoDisplay();
+        frame.getContentPane().add(studentInfoDisplay.getMainDisplay());
+      
+        frame.pack();
+        frame.setSize(750, 300);
+        frame.setVisible(true);
+      
+      }
+      else
+      {
+        /*JFrame popUp = new JFrame("Error Message");
+        JPanel pane = new JPanel();
+        pane.add(new JLabel("There are no students available to Display. Please enter student Info"));
+        popUp.add(pane);
+        popUp.pack();
+        popUp.setVisible(true);*/
+        JOptionPane.showMessageDialog(frame, "No students to Display. Please enter student info.");
+      }
+    }
+    else if(e.getActionCommand().equals("Save All Data"))
+    {
+      try{
+        mainFrameExecute.saveData();
+        mainFrameExecute.saveContestData();
+        System.out.println("Data should be saved");
+      }catch (IOException g){
+        System.out.println("file did not get created");
+      }
+    }
+    else if(e.getActionCommand().equals("Reset All Data"))
+    {
+      File newFile = new File("studentData.txt");
+      newFile.delete();
+      mainFrameExecute.studentList.clear();
+    }
+    else if(e.getActionCommand().equals("Add Contest"))
+    {
+      AddContestFrame frameC = new AddContestFrame();
+      frameC.addWindowListener
+      (new WindowAdapter()
+       {
+         public void windowCLosing(WindowEvent e)
+         {
+           System.exit(0);
+         }
+       }
+      );
+    }
+    else if(e.getActionCommand().equals("Delete Contest"))
+    {
+      DelContestFrame frameD = new DelContestFrame();
+      frameD.addWindowListener
+      (new WindowAdapter()
+       {
+         public void windowCLosing(WindowEvent e)
+         {
+           System.exit(0);
+         }
+       }
+      );
+    }
+    else if(e.getActionCommand().equals("Display Registered Contest"))
+    {
+      JFrame frame = new JFrame("Display Registered Contest");
+      frame.setLayout(new GridLayout(1,1));
+      ContestListDisplay pane2 = new ContestListDisplay();
+      frame.add(pane2);
+      DisplayRegisteredContest studentInfoDisplay = new DisplayRegisteredContest();
+      frame.getContentPane().add(studentInfoDisplay);
+      
+      frame.pack();
+      frame.setSize(750, 300);
+      frame.setVisible(true);
+      frame.addWindowListener
+      (new WindowAdapter()
+       {
+         public void windowCLosing(WindowEvent e)
+         {
+           System.exit(0);
+         }
+       }
+      );
+    }
+  }
+}

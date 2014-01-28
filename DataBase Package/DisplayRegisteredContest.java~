@@ -1,0 +1,47 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.io.*;
+import java.util.*;
+
+public class DisplayRegisteredContest extends JFrame implements ActionListener
+{
+  private JList students;
+  private String[] names;
+  
+  public DisplayRegisteredContest()
+  {
+    super("Display Registered Contest");
+    this.setLayout(new GridLayout(1, 1));
+    
+    ContestListDisplay pane = new ContestListDisplay();
+    this.add(pane);
+    JPanel listPane = new JPanel();
+    listPane.add(students);
+    this.add(listPane);
+    
+    
+  }
+  
+  public static void update(String contest)
+  {
+    names = new String[mainFrameExecute.studentList.size()];
+    
+    for(int x = 0; x<mainFrameExecute.studentList.size(); x++)
+    {
+      for(int y = 0; y<mainFrameExecute.studentList.get(x).contests.size(); y++)
+      {
+        if(mainFrameExecute.studentList.get(x).contests.get(y).equalsIgnoreCase(contest))
+        {
+          names[x] = mainFrameExecute.studentList.get(x).getfirstName() + " " + mainFrameExecute.studentList.get(x).getlastName();
+          break;
+        }
+      }
+    }
+    students = new JList(names);
+  }
+  
+  public void actionPerformed(ActionEvent e)
+  {
+  }
+}

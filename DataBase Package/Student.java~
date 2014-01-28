@@ -1,0 +1,71 @@
+import java.io.*;
+import java.util.*;
+
+public class Student
+{
+  private String firstName;
+  private String lastName;
+  private String studentNumber;
+  private String grade;
+  private int totalCost;
+  public ArrayList <String> contests = new ArrayList<String>();
+  public ArrayList <String> contestCost = new ArrayList<String>();
+  public ArrayList <String> contestGrade = new ArrayList<String>();
+  
+  public Student(String x, String y, String z, String c) throws IOException
+  {
+    totalCost = 0;
+    for(int i = 0; i<contestCost.size(); i++)
+    {
+      String temp = contestCost.get(i);
+      totalCost += Integer.parseInt(temp);
+    }
+    firstName = x;
+    lastName = y;
+    studentNumber = z;
+    grade = c;
+  }
+  
+  public String getfirstName()
+  {
+    return firstName;
+  }
+  
+  public String getlastName()
+  {
+    return lastName;
+  }
+  
+  public String getStudentNumber()
+  {
+    return studentNumber;
+  }
+  
+  public String getGrade()
+  {
+    return grade;
+  }
+  
+  public void signUpContest(String name, String price)
+  {
+    contests.add(name);
+    contestCost.add(price);
+  }
+  
+  public String contestList()
+  {
+    String contestList = new String("");
+    for(int x = 0; x<contests.size(); x++)
+    {
+      contestList.concat(contests.get(x) + ", ");
+    }
+    return contestList;
+  }
+  
+  public int calculateCost(int paidAmount)
+  {
+    
+    totalCost-=paidAmount;
+    return totalCost;
+  }
+}

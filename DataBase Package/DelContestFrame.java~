@@ -1,0 +1,84 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+
+public class DelContestFrame extends JFrame implements ActionListener
+{
+  private JList contestList;
+  private String[] names;
+  private JPanel bodyPane;
+  
+  public DelContestFrame()
+  {
+    super("Delete a Contest");
+    this.setLayout(new BorderLayout());
+    
+    JPanel headerPane = new JPanel();
+    headerPane.add(new JLabel("Please Selected the contest name to be deleted"));
+    this.add(headerPane, BorderLayout.NORTH);
+    
+    bodyPane = new JPanel();
+    upDateList();
+    this.add(bodyPane, BorderLayout.CENTER);
+    
+    JPanel endPane = new JPanel();
+    JButton delButton = new JButton("Delete");
+    delButton.addActionListener(this);
+    endPane.add(delButton);
+    this.add(endPane, BorderLayout.SOUTH);
+    
+    this.pack();
+    this.setVisible(true);
+  }
+  
+  private void upDateList()
+  {
+    names = new String[mainFrameExecute.contestList.size()];
+    for(int j = 0; j<mainFrameExecute.contestList.size(); j++)
+    {
+      names[j] = mainFrameExecute.contestList.get(j).getContestName() 
+        + " Price: " 
+        + mainFrameExecute.contestList.get(j).getContestCost()
+        + " Grade: " 
+        + mainFrameExecute.contestList.get(j).getContestGrade();
+    }
+    contestList = new JList(names);
+    bodyPane.add(contestList);
+  }
+  
+  public void actionPerformed(ActionEvent e)
+  {
+    if(e.getActionCommand().equals("Delete"))
+    {
+      if(mainFrameExecute.contestList.size() != 0)
+      {
+      String selectedName = contestList.getSelectedValue().toString();
+      for(int x = 0; x<mainFrameExecute.contestList.size(); x++)
+      {
+        String toBeDel = mainFrameExecute.contestList.get(x).getContestName()+ " Price: " 
+        + mainFrameExecute.contestList.get(x).getContestCost()
+        + " Grade: " 
+        + mainFrameExecute.contestList.get(x).getContestGrade();;
+        System.out.println(selectedName + " " + toBeDel);
+        if(toBeDel.equals(selectedName))
+        {
+          mainFrameExecute.contestList.remove(x);
+          //System.out.println("contest Removed");
+        }
+      }
+      }
+      else
+      {
+        JFrame popUp = new JFrame("Error Message");
+        JPanel pane = new JPanel();
+        pane.add(new JLabel("There are no Contests Available to Delete"));
+        popUp.add(pane);
+        popUp.pack();
+        popUp.setVisible(true);
+      }
+      //upDateList();
+      contestList.updateUI();
+    }
+  }
+}

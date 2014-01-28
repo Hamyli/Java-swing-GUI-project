@@ -1,0 +1,17 @@
+import javax.swing.*;
+import java.awt.event.*;
+
+public class TableFrame extends JFrame
+{
+  public TableFrame()
+  {
+    super("DataBase Table");
+    
+    TablePanel pane = new TablePanel();
+    pane.setOpaque(true);
+    this.setContentPane(pane);
+    
+    this.pack();
+    this.setVisible(true);
+  }
+}
